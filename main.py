@@ -16,10 +16,10 @@ class Ui(QtWidgets.QMainWindow):
         self.local_align_button.clicked.connect(self.local_alignment)
         self.align_msa_button.clicked.connect(self.multiple_sequence_alignment) 
         self.align_msa_button.clicked.connect(self.get_input_msa)
-        self.browse_fasta.clicked.connect(self.browse_files)
+        self.actionOpen_Fasta.triggered.connect(self.browse_files)
         self.flag = 0
     
-    def browse_files(self): #browse device to open any file
+    def browse_files(self): # browse device to open any file
         self.flag = 1
         file_name = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File') 
         self.path = file_name[0] #variable to store opened file path
@@ -67,7 +67,6 @@ class Ui(QtWidgets.QMainWindow):
         self.msa_seq2_in_line.setPlainText(seq2_in)
         self.msa_seq3_in_line.setPlainText(seq3_in)
         self.msa_seq4_in_line.setPlainText(seq4_in)
-
 
     def global_alignment(self):
         seq1, seq2, match, mismatch, gap = self.get_input_pairwise()
