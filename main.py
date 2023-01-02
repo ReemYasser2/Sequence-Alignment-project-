@@ -19,19 +19,21 @@ class Ui(QtWidgets.QMainWindow):
         self.actionOpen_Fasta.triggered.connect(self.browse_files)
         self.flag = 0
     
-    def browse_files(self): # browse device to open any file
-        self.flag = 1
+    def browse_files(self): 
+        # browse device to open any file
+        self.flag = 1 # to choose between input in gui and from fasta file flag = 1 is for fasta file
         file_name = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File') 
         self.path = file_name[0] #variable to store opened file path
-        fasta_read = open(self.path)
-        sequences= [i for i in SeqIO.parse(fasta_read,'fasta')]
+        fasta_read = open(self.path) # read a fasta  file
+        sequences= [i for i in SeqIO.parse(fasta_read,'fasta')] # read multiple sequences from the file
+        # store each sequence in a variable
         self.sequence_1= sequences[0].seq
         self.sequence_2=sequences[1].seq
         self.sequence_3=sequences[2].seq
         self.sequence_4=sequences[3].seq
 
     def get_input_pairwise(self):
-        if self.flag == 0:
+        if self.flag == 0: # by default read from the gui
             # read user input sequences from the gui 
             seq1_in = self.pairwise_seq1_in_line.toPlainText()
             seq2_in = self.pairwise_seq2_in_line.toPlainText()
@@ -39,6 +41,7 @@ class Ui(QtWidgets.QMainWindow):
             # read from the fasta file
             seq1_in = self.sequence_1
             seq2_in = self.sequence_2
+            # display the read sequences for the user to see in the gui
             self.pairwise_seq1_in_line.setPlainText(str(self.sequence_1))
             self.pairwise_seq2_in_line.setPlainText(str(self.sequence_2))
         self.flag = 0
@@ -52,9 +55,9 @@ class Ui(QtWidgets.QMainWindow):
         return [seq1, seq2, match, mismatch, gap]
 
     def get_input_msa(self):
-        # use muscle to align multiple sequences
+        # read the input fasta file and display the sequences inside it in the input fields of the gui
         fasta_read = open("Group_1.fasta")
-        sequences= [i for i in SeqIO.parse(fasta_read,'fasta')]
+        sequences= [i for i in SeqIO.parse(fasta_read,'fasta')] # loop over the sequences and place each in a variable
         self.sequence_1= sequences[0].seq
         self.sequence_2=sequences[1].seq
         self.sequence_3=sequences[2].seq
@@ -63,6 +66,7 @@ class Ui(QtWidgets.QMainWindow):
         seq2_in = str(self.sequence_2)
         seq3_in = str(self.sequence_3)
         seq4_in = str(self.sequence_4)
+        # display the sequences in the input fields
         self.msa_seq1_in_line.setPlainText(seq1_in)
         self.msa_seq2_in_line.setPlainText(seq2_in)
         self.msa_seq3_in_line.setPlainText(seq3_in)
@@ -106,7 +110,9 @@ class Ui(QtWidgets.QMainWindow):
                 else:
                     score = mismatch
                 res = max(matrix_global[i-1][j-1] + score, matrix_global[i-1][j] + gap, matrix_global[i][j-1] + gap)
+                # fill the matrix with the max score at each step
                 matrix_global[i][j] = res
+                # fill the traceback matrix with the direction or arrows for traceback
                 if res == matrix_global[i-1][j-1] + score:
                     traceback_matrix[i][j] = diag_dir
                 if res == matrix_global[i-1][j] + gap:
@@ -118,7 +124,8 @@ class Ui(QtWidgets.QMainWindow):
         aligned_seq2 = []
         i = len_seq_2 # rows
         j = len_seq_1 # cols 
-
+        # write into the aligned arrays, the nucleotide or added gap 
+        # according to the direction in the traceback matrix
         while(i > 0 or j > 0):
             if traceback_matrix[i,j] == diag_dir:
                 aligned_seq1.append(seq1[j-1])
@@ -183,9 +190,10 @@ class Ui(QtWidgets.QMainWindow):
                     score = match
                 else:
                     score = mismatch
+                # fill the matrix with the max score at each step                   
                 res = max(0, matrix_local[i-1][j-1] + score, matrix_local[i-1][j] + gap, matrix_local[i][j-1] + gap)
                 matrix_local[i][j] = res
-
+                # fill the traceback matrix with the direction or arrows for traceback
                 if res == matrix_local[i-1][j-1] + score:
                     traceback_matrix[i][j] = diag_dir
                 if res == matrix_local[i-1][j] + gap:
@@ -202,7 +210,8 @@ class Ui(QtWidgets.QMainWindow):
         aligned_seq2 = []
         i = start_loc_row[0] # rows
         j = start_loc_col[0] # cols
-
+        # write into the aligned arrays, the nucleotide or added gap 
+        # according to the direction in the traceback matrix
         while(i > 0 or j > 0):
             if traceback_matrix[i,j] == diag_dir:
                 aligned_seq1.append(seq1[j-1])
@@ -219,6 +228,8 @@ class Ui(QtWidgets.QMainWindow):
                 i -= 1
             elif traceback_matrix[i,j] == done:
                 break
+
+        # format the output and display in the gui
         aligned_seq1.reverse()
         aligned_seq2.reverse()
         separator = ""
@@ -236,13 +247,13 @@ class Ui(QtWidgets.QMainWindow):
 
     def multiple_sequence_alignment(self):
         self.msa_output_line.clear()
-         # use muscle to align multiple sequences
+        # use muscle to align multiple sequences
         output = subprocess.check_output(
         ["F:\Installations\muscle5.1.win64.exe",
         "-align", r"F:\Personal\UNI\Senior I Fall 2022\SBEN331 - Bioinformatics I\Final Project\Group_1.fasta",
         "-output", r"F:\Personal\UNI\Senior I Fall 2022\SBEN331 - Bioinformatics I\Final Project\aligned.fasta"],
         text=True)
-
+        # open the file to display the results of the multiple sequence alignment
         file =open("aligned.fasta")
         seq = ""
         for line in file:
@@ -250,13 +261,8 @@ class Ui(QtWidgets.QMainWindow):
             seq += line.strip()
             seq += "\n"
         print(seq)
-
         self.msa_output_line.setText(seq)
 
 app = QtWidgets.QApplication(sys.argv)
 window = Ui()
 app.exec_()
-
-
-
-
