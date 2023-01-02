@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, uic
 import sys
 import numpy as np
 import subprocess # for MSA using muscle
+from Bio import SeqIO
 
 def stringToList(data):
    return list(data)
@@ -12,15 +13,35 @@ class Ui(QtWidgets.QMainWindow):
         uic.loadUi('mainwindow.ui', self)
         self.show()
         self.global_align_button.clicked.connect(self.global_alignment)
-        self.align_msa_button.clicked.connect(self.multiple_sequence_alignment)
         self.local_align_button.clicked.connect(self.local_alignment)
-        # get_input_msa
+        self.align_msa_button.clicked.connect(self.multiple_sequence_alignment) 
+        self.align_msa_button.clicked.connect(self.get_input_msa)
+        self.browse_fasta.clicked.connect(self.browse_files)
+        self.flag = 0
+    
+    def browse_files(self): #browse device to open any file
+        self.flag = 1
+        file_name = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File') 
+        self.path = file_name[0] #variable to store opened file path
+        fasta_read = open(self.path)
+        sequences= [i for i in SeqIO.parse(fasta_read,'fasta')]
+        self.sequence_1= sequences[0].seq
+        self.sequence_2=sequences[1].seq
+        self.sequence_3=sequences[2].seq
+        self.sequence_4=sequences[3].seq
 
     def get_input_pairwise(self):
-
-        # read user input sequences from the gui 
-        seq1_in = self.pairwise_seq1_in_line.toPlainText()
-        seq2_in = self.pairwise_seq2_in_line.toPlainText()
+        if self.flag == 0:
+            # read user input sequences from the gui 
+            seq1_in = self.pairwise_seq1_in_line.toPlainText()
+            seq2_in = self.pairwise_seq2_in_line.toPlainText()
+        elif self.flag == 1:
+            # read from the fasta file
+            seq1_in = self.sequence_1
+            seq2_in = self.sequence_2
+            self.pairwise_seq1_in_line.setPlainText(str(self.sequence_1))
+            self.pairwise_seq2_in_line.setPlainText(str(self.sequence_2))
+        self.flag = 0
         # convert the string to a list to deal with more easily in the alignment functions
         seq1 = stringToList(seq1_in)
         seq2 = stringToList(seq2_in)
@@ -31,29 +52,25 @@ class Ui(QtWidgets.QMainWindow):
         return [seq1, seq2, match, mismatch, gap]
 
     def get_input_msa(self):
-        # read user input sequences from the gui 
-        seq1_in = self.msa_seq1_in_line.toPlainText()
-        seq2_in = self.msa_seq2_in_line.toPlainText()
         # use muscle to align multiple sequences
-        output = subprocess.check_output(
-        ["F:\Installations\muscle5.1.win64.exe",
-        "-align", r"F:\Personal\UNI\Senior I Fall 2022\SBEN331 - Bioinformatics I\Final Project\Group_1.fasta",
-        "-output", r"F:\Personal\UNI\Senior I Fall 2022\SBEN331 - Bioinformatics I\Final Project\aligned.fasta"],
-        text=True)
-        # convert the string to a list to deal with more easily in the alignment functions
-        seq1 = stringToList(seq1_in)
-        seq2 = stringToList(seq2_in)
-        # read the scores from the user
-        match = int(self.msa_match_input.value())
-        mismatch = int(self.msa_mismatch_input.value())
-        gap = int(self.msa_gap_input.value())
-        return [seq1, seq2, match, mismatch, gap]
+        fasta_read = open("Group_1.fasta")
+        sequences= [i for i in SeqIO.parse(fasta_read,'fasta')]
+        self.sequence_1= sequences[0].seq
+        self.sequence_2=sequences[1].seq
+        self.sequence_3=sequences[2].seq
+        self.sequence_4=sequences[3].seq
+        seq1_in = str(self.sequence_1)
+        seq2_in = str(self.sequence_2)
+        seq3_in = str(self.sequence_3)
+        seq4_in = str(self.sequence_4)
+        self.msa_seq1_in_line.setPlainText(seq1_in)
+        self.msa_seq2_in_line.setPlainText(seq2_in)
+        self.msa_seq3_in_line.setPlainText(seq3_in)
+        self.msa_seq4_in_line.setPlainText(seq4_in)
+
 
     def global_alignment(self):
-        seq1_in, seq2_in, match, mismatch, gap = self.get_input_pairwise()
-        # input sequences
-        seq1 = stringToList(seq1_in)
-        seq2 = stringToList(seq2_in)
+        seq1, seq2, match, mismatch, gap = self.get_input_pairwise()
         # traceback step directions
         done = 5
         up_dir = 1
@@ -132,6 +149,7 @@ class Ui(QtWidgets.QMainWindow):
         alignment_score += "\n"
 
         output = output_seq1 + output_seq2 + alignment_score
+        self.pairwise_output_line.clear()
         self.pairwise_output_line.setText(str(output))
 
     def local_alignment(self):
@@ -214,12 +232,27 @@ class Ui(QtWidgets.QMainWindow):
         out_score += "\n"
 
         output = output_seq1 + output_seq2 + out_score
+        self.pairwise_output_line.clear()
         self.pairwise_output_line.setText(str(output))
 
     def multiple_sequence_alignment(self):
-        seq1, seq2, match, mismatch, gap = self.get_input_msa()
-        output = str(match) + " " +  str(mismatch) + " " + str(gap)
-        self.msa_output_line.setText(str(output))     
+        self.msa_output_line.clear()
+         # use muscle to align multiple sequences
+        output = subprocess.check_output(
+        ["F:\Installations\muscle5.1.win64.exe",
+        "-align", r"F:\Personal\UNI\Senior I Fall 2022\SBEN331 - Bioinformatics I\Final Project\Group_1.fasta",
+        "-output", r"F:\Personal\UNI\Senior I Fall 2022\SBEN331 - Bioinformatics I\Final Project\aligned.fasta"],
+        text=True)
+
+        file =open("aligned.fasta")
+        seq = ""
+        for line in file:
+            if line.startswith(">"): continue
+            seq += line.strip()
+            seq += "\n"
+        print(seq)
+
+        self.msa_output_line.setText(seq)
 
 app = QtWidgets.QApplication(sys.argv)
 window = Ui()
