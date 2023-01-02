@@ -29,7 +29,7 @@ background-color: rgb(20, 8, 38);</string>
        <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -72,14 +72,7 @@ background-color: rgb(20, 8, 38);</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_3">
               <item row="0" column="0">
-               <widget class="QLabel" name="pairwise_seq2_in_line">
-                <property name="styleSheet">
-                 <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
+               <widget class="QTextEdit" name="pairwise_seq2_in_line"/>
               </item>
              </layout>
             </widget>
@@ -110,14 +103,7 @@ background-color: rgb(20, 8, 38);</string>
                </property>
                <layout class="QGridLayout" name="gridLayout_2">
                 <item row="0" column="0">
-                 <widget class="QLabel" name="pairwise_seq1_in_line">
-                  <property name="styleSheet">
-                   <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
+                 <widget class="QTextEdit" name="pairwise_seq1_in_line"/>
                 </item>
                </layout>
               </widget>
@@ -242,7 +228,7 @@ background-color: rgb(20, 8, 38);</string>
                <item row="2" column="0">
                 <widget class="QLabel" name="label_6">
                  <property name="text">
-                  <string>Open Gap</string>
+                  <string>Gap</string>
                  </property>
                 </widget>
                </item>
@@ -269,20 +255,6 @@ background-color: rgb(20, 8, 38);</string>
                </item>
                <item row="0" column="3">
                 <widget class="QSpinBox" name="pair_mismatch_input">
-                 <property name="minimum">
-                  <number>-99</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="2">
-                <widget class="QLabel" name="label_7">
-                 <property name="text">
-                  <string>Extend Gap</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="3">
-                <widget class="QSpinBox" name="spinBox_4">
                  <property name="minimum">
                   <number>-99</number>
                  </property>
@@ -371,14 +343,7 @@ background-color: rgb(20, 8, 38);</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_14">
               <item row="0" column="0">
-               <widget class="QLabel" name="msa_seq1_in_line">
-                <property name="styleSheet">
-                 <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
+               <widget class="QTextEdit" name="msa_seq1_in_line"/>
               </item>
              </layout>
             </widget>
@@ -407,14 +372,7 @@ background-color: rgb(20, 8, 38);</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_15">
               <item row="0" column="0">
-               <widget class="QLabel" name="msa_seq2_in_line">
-                <property name="styleSheet">
-                 <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
+               <widget class="QTextEdit" name="msa_seq2_in_line"/>
               </item>
              </layout>
             </widget>
@@ -443,14 +401,7 @@ background-color: rgb(20, 8, 38);</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_20">
               <item row="0" column="0">
-               <widget class="QLabel" name="msa_seq3_in_line">
-                <property name="styleSheet">
-                 <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
+               <widget class="QTextEdit" name="msa_seq3_in_line"/>
               </item>
              </layout>
             </widget>
@@ -479,14 +430,7 @@ background-color: rgb(20, 8, 38);</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_21">
               <item row="0" column="0">
-               <widget class="QLabel" name="msa_seq4_in_line">
-                <property name="styleSheet">
-                 <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
+               <widget class="QTextEdit" name="msa_seq4_in_line"/>
               </item>
              </layout>
             </widget>
@@ -539,32 +483,6 @@ background-color: rgb(20, 8, 38);</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="2">
-           <widget class="QPushButton" name="align_msa_button">
-            <property name="styleSheet">
-             <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
-            </property>
-            <property name="text">
-             <string>Align</string>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QPushButton" name="pushButton_9">
-            <property name="styleSheet">
-             <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
-            </property>
-            <property name="text">
-             <string>Local</string>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="1" rowspan="2">
            <widget class="QGroupBox" name="groupBox_2">
             <property name="sizePolicy">
@@ -589,7 +507,7 @@ background-color: rgb(20, 8, 38);</string>
                <item row="2" column="0">
                 <widget class="QLabel" name="label">
                  <property name="text">
-                  <string>Open Gap</string>
+                  <string>Gap</string>
                  </property>
                 </widget>
                </item>
@@ -616,20 +534,6 @@ background-color: rgb(20, 8, 38);</string>
                </item>
                <item row="0" column="3">
                 <widget class="QSpinBox" name="msa_mismatch_input">
-                 <property name="minimum">
-                  <number>-99</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="2">
-                <widget class="QLabel" name="label_20">
-                 <property name="text">
-                  <string>Extend Gap</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="3">
-                <widget class="QSpinBox" name="spinBox_8">
                  <property name="minimum">
                   <number>-99</number>
                  </property>
@@ -665,6 +569,19 @@ background-color: rgb(20, 8, 38);</string>
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="0" column="2" colspan="2">
+           <widget class="QPushButton" name="align_msa_button">
+            <property name="styleSheet">
+             <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
+            </property>
+            <property name="text">
+             <string>Align</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
