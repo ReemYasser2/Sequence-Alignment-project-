@@ -5,9 +5,35 @@ import subprocess # for MSA using muscle
 from Bio import SeqIO
 from PyQt5.QtWidgets import *
 
+from math import log
+from collections import Counter
+
+def MI(sequences,i,j):
+    Pi = Counter(sequence[i] for sequence in sequences)
+    Pj = Counter(sequence[j] for sequence in sequences)
+    Pij = Counter((sequence[i],sequence[j]) for sequence in sequences)   
+
+    return sum(Pij[(x,y)]*log(Pij[(x,y)]/(Pi[x]*Pj[y])) for x,y in Pij)
 
 def stringToList(data):
    return list(data)
+   
+def compare(a,b):
+    identical_pairs_count = 0
+    all_pairs_count=0
+    mismatch_pairs_count =0
+    gaps_count =0
+    for x, y in zip(a, b):
+        if x!='-' and y!='-':
+            all_pairs_count+=1
+            if x == y:
+                identical_pairs_count += 1
+            else:
+                mismatch_pairs_count +=1
+        else:
+            gaps_count +=1
+        
+    return identical_pairs_count,all_pairs_count
 
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):
@@ -17,9 +43,13 @@ class Ui(QtWidgets.QMainWindow):
         self.global_align_button.clicked.connect(self.global_alignment)
         self.local_align_button.clicked.connect(self.local_alignment)
         self.align_msa_button.clicked.connect(self.multiple_sequence_alignment) 
-        self.align_msa_button.clicked.connect(self.get_input_msa)
+        # self.align_msa_button.clicked.connect(self.get_input_msa)
         self.actionOpen_Fasta.triggered.connect(self.browse_files)
+
+        self.assess_msa_button.clicked.connect(self.msa_assessment)
+
         self.flag = 0
+        self.msa_flag = 0
 
     def ShowPopUpMessage(self, popUpMessage):
         msg = QMessageBox()
@@ -31,7 +61,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def browse_files(self): 
         try:
-            # browse device to open any file
+            self.msa_flag = 1
             self.flag = 1 # to choose between input in gui and from fasta file flag = 1 is for fasta file
             file_name = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File') 
             self.path = file_name[0] #variable to store opened file path
@@ -52,13 +82,16 @@ class Ui(QtWidgets.QMainWindow):
                 seq1_in = self.pairwise_seq1_in_line.toPlainText()
                 seq2_in = self.pairwise_seq2_in_line.toPlainText()
             elif self.flag == 1:
+                self.flag = 0
                 # read from the fasta file
                 seq1_in = self.sequence_1
                 seq2_in = self.sequence_2
                 # display the read sequences for the user to see in the gui
+                self.pairwise_seq1_in_line.clear()
+                self.pairwise_seq2_in_line.clear()
                 self.pairwise_seq1_in_line.setPlainText(str(self.sequence_1))
                 self.pairwise_seq2_in_line.setPlainText(str(self.sequence_2))
-            self.flag = 0
+            
             # convert the string to a list to deal with more easily in the alignment functions
             seq1 = stringToList(seq1_in)
             seq2 = stringToList(seq2_in)
@@ -72,22 +105,49 @@ class Ui(QtWidgets.QMainWindow):
 
     def get_input_msa(self):
         try:
-            # read the input fasta file and display the sequences inside it in the input fields of the gui
-            fasta_read = open("Group_1.fasta")
-            sequences= [i for i in SeqIO.parse(fasta_read,'fasta')] # loop over the sequences and place each in a variable
-            self.sequence_1= sequences[0].seq
-            self.sequence_2=sequences[1].seq
-            self.sequence_3=sequences[2].seq
-            self.sequence_4=sequences[3].seq
-            seq1_in = str(self.sequence_1)
-            seq2_in = str(self.sequence_2)
-            seq3_in = str(self.sequence_3)
-            seq4_in = str(self.sequence_4)
-            # display the sequences in the input fields
-            self.msa_seq1_in_line.setPlainText(seq1_in)
-            self.msa_seq2_in_line.setPlainText(seq2_in)
-            self.msa_seq3_in_line.setPlainText(seq3_in)
-            self.msa_seq4_in_line.setPlainText(seq4_in)
+            if self.msa_flag == 1:
+                # read the input fasta file and display the sequences inside it in the input fields of the gui
+                # self.msa_flag = 0
+                fasta_read = open(self.path)
+                sequences= [i for i in SeqIO.parse(fasta_read,'fasta')] # loop over the sequences and place each in a variable
+                self.sequence_1= sequences[0].seq
+                self.sequence_2=sequences[1].seq
+                self.sequence_3=sequences[2].seq
+                self.sequence_4=sequences[3].seq
+                seq1_in = str(self.sequence_1)
+                seq2_in = str(self.sequence_2)
+                seq3_in = str(self.sequence_3)
+                seq4_in = str(self.sequence_4)
+                # display the sequences in the input fields
+                self.msa_seq1_in_line.clear()
+                self.msa_seq2_in_line.clear()
+                self.msa_seq3_in_line.clear()
+                self.msa_seq4_in_line.clear()
+                self.msa_seq1_in_line.setPlainText(seq1_in)
+                self.msa_seq2_in_line.setPlainText(seq2_in)
+                self.msa_seq3_in_line.setPlainText(seq3_in)
+                self.msa_seq4_in_line.setPlainText(seq4_in)
+                
+            elif self.msa_flag == 0:
+                seq1 = self.msa_seq1_in_line.toPlainText()
+                seq2 = self.msa_seq2_in_line.toPlainText()
+                seq3 = self.msa_seq3_in_line.toPlainText()
+                seq4 = self.msa_seq4_in_line.toPlainText()
+                if seq1 == "":
+                    all_sequences = [seq2, seq3, seq4]
+                if seq2 == "":
+                    all_sequences = [seq1, seq3, seq4]
+                if seq3 == "":
+                    all_sequences = [seq1, seq2, seq4]
+                if seq4 == "":
+                    all_sequences = [seq1, seq2, seq3]
+                else:
+                    all_sequences = [seq1, seq2, seq3, seq4]
+
+                file = open(r'.\user_seq.fasta', 'w+')
+                out = '\n'.join(['>Sequence' + str(i+1) + "\n" + j for i,j in enumerate(all_sequences)])
+                file.write(out)
+                file.close()
         except:
             self.ShowPopUpMessage("An error has occured wile opening the file")
 
@@ -272,24 +332,100 @@ class Ui(QtWidgets.QMainWindow):
 
     def multiple_sequence_alignment(self):
         try:
-            self.msa_output_line.clear()
+            self.get_input_msa()
             # use muscle to align multiple sequences
-            output = subprocess.check_output(
-            ["F:\Installations\muscle5.1.win64.exe",
-            "-align", r"F:\Personal\UNI\Senior I Fall 2022\SBEN331 - Bioinformatics I\Final Project\Group_1.fasta",
-            "-output", r"F:\Personal\UNI\Senior I Fall 2022\SBEN331 - Bioinformatics I\Final Project\aligned.fasta"],
-            text=True)
-            # open the file to display the results of the multiple sequence alignment
-            file =open("aligned.fasta")
-            seq = ""
-            for line in file:
-                if line.startswith(">"): continue
-                seq += line.strip()
-                seq += "\n"
-            print(seq)
-            self.msa_output_line.setText(seq)
+            if self.msa_flag == 1:
+                self.msa_flag = 0
+                output = subprocess.check_output(
+                ["Installations\muscle5.1.win64.exe",
+                "-align", r".\Group_1.fasta",
+                "-output", r".\aligned.fasta"],
+                text=True)
+                # open the file to display the results of the multiple sequence alignment
+                file =open("aligned.fasta")
+                seq = ""
+                for line in file:
+                    if line.startswith(">"): 
+                        seq+= "\n\n\n"
+                        continue
+                    seq += line.strip()
+                self.msa_output_line.clear()
+                self.msa_output_line.setText(seq)
+            elif self.msa_flag == 0:
+                output = subprocess.check_output(
+                ["Installations\muscle5.1.win64.exe",
+                "-align", r".\user_seq.fasta",
+                "-output", r".\user_aligned.fasta"],
+                text=True)
+                # open the file to display the results of the multiple sequence alignment
+                file = open("user_aligned.fasta")
+                seq = ""
+                for line in file:
+                    if line.startswith(">"): 
+                        seq+= "\n\n\n"
+                        continue
+                    seq += line.strip()
+                self.msa_output_line.clear()
+                self.msa_output_line.setText(seq)
+
         except:
             self.ShowPopUpMessage("An error has occured wile aligning the sequences")
+
+    def msa_assessment(self):
+        fasta_read = open("aligned.fasta") # read a fasta  file
+        sequences= [i for i in SeqIO.parse(fasta_read,'fasta')] # read multiple sequences from the file
+
+        # store each sequence in a variable
+        sequence_1= sequences[0].seq
+        sequence_2=sequences[1].seq
+        sequence_3=sequences[2].seq
+        sequence_4=sequences[3].seq
+
+        seq1_str = str(sequence_1)
+        seq2_str = str(sequence_2)
+        seq3_str = str(sequence_3)
+        seq4_str = str(sequence_4)
+        seq_len = len(seq4_str) - 1
+
+        seq1 = stringToList(seq1_str)
+        seq2 = stringToList(seq2_str)
+        seq3 = stringToList(seq3_str)
+        seq4 = stringToList(seq4_str)
+        sequences_matrix = [seq1, seq2, seq3, seq4]
+        
+        # calculate the percent identity
+        total_pairs=0
+        for i in range(len(sequences)): 
+            for j in range(i+1,len(sequences)): 
+                seq1=sequences[i].seq 
+                seq2=sequences[j].seq 
+
+                    #For percent identity analysis
+                identical_pairs_count,all_pairs_count=compare(seq1,seq2)
+                total_pairs+=all_pairs_count
+
+            percent_Identity=identical_pairs_count/total_pairs*100 
+
+        formatted_PI = "{:.2f}".format(percent_Identity)
+        print(formatted_PI)
+        
+        out = MI(sequences_matrix,seq_len,seq_len)
+        formatted_mi = "{:.2f}".format(out)
+        
+        
+        self.lcd_mutual_information.display(formatted_mi)
+        self.lcd_percent_identity.display(formatted_PI)
+
+
+
+
+
+    
+
+
+
+
+
 
 app = QtWidgets.QApplication(sys.argv)
 window = Ui()
