@@ -35,7 +35,7 @@ def MI(sequences,i,j):
     return sum(Pij[(x,y)]*log(Pij[(x,y)]/(Pi[x]*Pj[y])) for x,y in Pij)
 
 out = MI(sequences_matrix,seq_len,seq_len)
-formatted_out = "{:.3f}".format(out)
+formatted_out = "{:.2f}".format(out)
 print(formatted_out)
 
 
