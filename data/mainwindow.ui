@@ -49,7 +49,7 @@ font: 9pt &quot;MS Shell Dlg 2&quot;;</string>
        <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -165,7 +165,7 @@ font: 9pt &quot;MS Shell Dlg 2&quot;;</string>
                <x>0</x>
                <y>0</y>
                <width>1044</width>
-               <height>126</height>
+               <height>124</height>
               </rect>
              </property>
              <layout class="QGridLayout" name="gridLayout_4">
@@ -420,7 +420,7 @@ QPushButton:hover {
                <x>0</x>
                <y>0</y>
                <width>518</width>
-               <height>148</height>
+               <height>147</height>
               </rect>
              </property>
              <layout class="QGridLayout" name="gridLayout_15">
@@ -446,7 +446,7 @@ QPushButton:hover {
                <x>0</x>
                <y>0</y>
                <width>517</width>
-               <height>147</height>
+               <height>146</height>
               </rect>
              </property>
              <layout class="QGridLayout" name="gridLayout_20">
@@ -545,7 +545,7 @@ QPushButton:hover {
                <x>0</x>
                <y>0</y>
                <width>517</width>
-               <height>148</height>
+               <height>147</height>
               </rect>
              </property>
              <layout class="QGridLayout" name="gridLayout_21">
@@ -572,7 +572,7 @@ QPushButton:hover {
                <x>0</x>
                <y>0</y>
                <width>518</width>
-               <height>147</height>
+               <height>146</height>
               </rect>
              </property>
              <layout class="QGridLayout" name="gridLayout_14">
@@ -762,6 +762,15 @@ QPushButton:hover {
          </layout>
         </item>
        </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="icon">
+        <iconset>
+         <normaloff>icons/Real-Time-256.png</normaloff>icons/Real-Time-256.png</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>Visualization</string>
+       </attribute>
       </widget>
      </widget>
     </item>

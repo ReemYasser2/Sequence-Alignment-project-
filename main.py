@@ -5,9 +5,35 @@ import subprocess # for MSA using muscle
 from Bio import SeqIO
 from PyQt5.QtWidgets import *
 
+from math import log
+from collections import Counter
+
+def MI(sequences,i,j):
+    Pi = Counter(sequence[i] for sequence in sequences)
+    Pj = Counter(sequence[j] for sequence in sequences)
+    Pij = Counter((sequence[i],sequence[j]) for sequence in sequences)   
+
+    return sum(Pij[(x,y)]*log(Pij[(x,y)]/(Pi[x]*Pj[y])) for x,y in Pij)
 
 def stringToList(data):
    return list(data)
+   
+def compare(a,b):
+    identical_pairs_count = 0
+    all_pairs_count=0
+    mismatch_pairs_count =0
+    gaps_count =0
+    for x, y in zip(a, b):
+        if x!='-' and y!='-':
+            all_pairs_count+=1
+            if x == y:
+                identical_pairs_count += 1
+            else:
+                mismatch_pairs_count +=1
+        else:
+            gaps_count +=1
+        
+    return identical_pairs_count,all_pairs_count
 
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):
@@ -19,6 +45,9 @@ class Ui(QtWidgets.QMainWindow):
         self.align_msa_button.clicked.connect(self.multiple_sequence_alignment) 
         # self.align_msa_button.clicked.connect(self.get_input_msa)
         self.actionOpen_Fasta.triggered.connect(self.browse_files)
+
+        self.assess_msa_button.clicked.connect(self.msa_assessment)
+
         self.flag = 0
         self.msa_flag = 0
 
@@ -308,7 +337,7 @@ class Ui(QtWidgets.QMainWindow):
             if self.msa_flag == 1:
                 self.msa_flag = 0
                 output = subprocess.check_output(
-                ["F:\Installations\muscle5.1.win64.exe",
+                ["Installations\muscle5.1.win64.exe",
                 "-align", r".\Group_1.fasta",
                 "-output", r".\aligned.fasta"],
                 text=True)
@@ -317,14 +346,14 @@ class Ui(QtWidgets.QMainWindow):
                 seq = ""
                 for line in file:
                     if line.startswith(">"): 
-                        seq+= "\n\n"
+                        seq+= "\n\n\n"
                         continue
                     seq += line.strip()
                 self.msa_output_line.clear()
                 self.msa_output_line.setText(seq)
             elif self.msa_flag == 0:
                 output = subprocess.check_output(
-                ["F:\Installations\muscle5.1.win64.exe",
+                ["Installations\muscle5.1.win64.exe",
                 "-align", r".\user_seq.fasta",
                 "-output", r".\user_aligned.fasta"],
                 text=True)
@@ -341,6 +370,62 @@ class Ui(QtWidgets.QMainWindow):
 
         except:
             self.ShowPopUpMessage("An error has occured wile aligning the sequences")
+
+    def msa_assessment(self):
+        fasta_read = open("aligned.fasta") # read a fasta  file
+        sequences= [i for i in SeqIO.parse(fasta_read,'fasta')] # read multiple sequences from the file
+
+        # store each sequence in a variable
+        sequence_1= sequences[0].seq
+        sequence_2=sequences[1].seq
+        sequence_3=sequences[2].seq
+        sequence_4=sequences[3].seq
+
+        seq1_str = str(sequence_1)
+        seq2_str = str(sequence_2)
+        seq3_str = str(sequence_3)
+        seq4_str = str(sequence_4)
+        seq_len = len(seq4_str) - 1
+
+        seq1 = stringToList(seq1_str)
+        seq2 = stringToList(seq2_str)
+        seq3 = stringToList(seq3_str)
+        seq4 = stringToList(seq4_str)
+        sequences_matrix = [seq1, seq2, seq3, seq4]
+        
+        # calculate the percent identity
+        total_pairs=0
+        for i in range(len(sequences)): 
+            for j in range(i+1,len(sequences)): 
+                seq1=sequences[i].seq 
+                seq2=sequences[j].seq 
+
+                    #For percent identity analysis
+                identical_pairs_count,all_pairs_count=compare(seq1,seq2)
+                total_pairs+=all_pairs_count
+
+            percent_Identity=identical_pairs_count/total_pairs*100 
+
+        formatted_PI = "{:.2f}".format(percent_Identity)
+        print(formatted_PI)
+        
+        out = MI(sequences_matrix,seq_len,seq_len)
+        formatted_mi = "{:.2f}".format(out)
+        
+        
+        self.lcd_mutual_information.display(formatted_mi)
+        self.lcd_percent_identity.display(formatted_PI)
+
+
+
+
+
+    
+
+
+
+
+
 
 app = QtWidgets.QApplication(sys.argv)
 window = Ui()
