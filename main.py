@@ -283,10 +283,10 @@ class Ui(QtWidgets.QMainWindow):
             file =open("aligned.fasta")
             seq = ""
             for line in file:
-                if line.startswith(">"): continue
+                if line.startswith(">"): 
+                    seq+= "\n\n\n"
+                    continue
                 seq += line.strip()
-                seq += "\n"
-            print(seq)
             self.msa_output_line.setText(seq)
         except:
             self.ShowPopUpMessage("An error has occured wile aligning the sequences")
