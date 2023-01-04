@@ -403,7 +403,7 @@ class Ui(QtWidgets.QMainWindow):
                 self.msa_flag = 0
                 output = subprocess.check_output(
                 ["Installations\muscle5.1.win64.exe",
-                "-align", r".\Group_1.fasta",
+                "-align", r".\data\Fasta Files\Group_1.fasta",
                 "-output", r".\aligned.fasta"],
                 text=True)
                 # open the file to display the results of the multiple sequence alignment
