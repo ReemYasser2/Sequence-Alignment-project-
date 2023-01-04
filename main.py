@@ -43,8 +43,8 @@ def calc_sop(seq1, seq2, pair_scores):
     #if not a gap, get the score from the dictionary
     if seq1[i] != '-' and seq2[i] != '-':
         sop += pair_scores[(seq1[i]+seq2[i])]
-    else:
-        #sdet gap penalty with -2
+    elif seq1[i] == '-' or seq2[i] == '-':
+        #set gap penalty with -2
         sop -=2
   return sop
 
