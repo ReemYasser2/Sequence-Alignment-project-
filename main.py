@@ -609,11 +609,23 @@ class Ui(QtWidgets.QMainWindow):
 
         seq_arr = np.asarray(mat)
 
-        seq_arr[seq_arr=='A'] = '1' # purple
-        seq_arr[seq_arr=='G'] = '2' # blue
-        seq_arr[seq_arr=='T'] = '3' # green
-        seq_arr[seq_arr=='C'] = '4' # yellow
+        seq_arr[seq_arr=='A'] = '1' 
+        seq_arr[seq_arr=='G'] = '2' 
+        seq_arr[seq_arr=='T'] = '3'
+        seq_arr[seq_arr=='C'] = '4' 
         seq_arr[seq_arr=='-'] = '0'
+        # with gaps
+        # a blue
+        # - purple
+        # g dark green
+        # t light green
+        # c yellow
+
+        # no gaps
+        # a purple
+        # g blue
+        # t green
+        # c yellow
 
         int_seq = np.uint8(seq_arr)
         final = int_seq * 50
