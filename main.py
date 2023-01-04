@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets, uic, QtGui
 import sys
 import numpy as np
-import subprocess # for MSA using muscle
+import subprocess
 from Bio import SeqIO
 from PyQt5.QtWidgets import *
 from math import log
@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import pandas as pd
 def MI(sequences,i,j):
+    # direct appplication for the rule 
     Pi = Counter(sequence[i] for sequence in sequences)
     Pj = Counter(sequence[j] for sequence in sequences)
     Pij = Counter((sequence[i],sequence[j]) for sequence in sequences)   
@@ -47,8 +48,6 @@ def calc_sop(seq1, seq2, pair_scores):
         sop -=2
   return sop
 
-
-
 plt.rcParams["figure.autolayout"] = True
 # plt.rcParams['axes.facecolor'] = 'black'
 plt.rc('axes', edgecolor='w')
@@ -63,12 +62,17 @@ class Ui(QtWidgets.QMainWindow):
         self.setWindowIcon(QtGui.QIcon('./data/icons/icon.png')) # icon added
         self.setWindowTitle("Sequence Alignment Viewer")
 
-
         self.show()
+        # alignment function calls using buttons
         self.global_align_button.clicked.connect(self.global_alignment)
         self.local_align_button.clicked.connect(self.local_alignment)
         self.align_msa_button.clicked.connect(self.multiple_sequence_alignment) 
+        
+        # clear button calls
+        self.msa_clear_button.clicked.connect(self.clear_msa_fields)
+        self.pairwise_clear_button.clicked.connect(self.clear_pairwise_fields)
 
+        # data visualization function calls
         self.visualize_msa_data_button.clicked.connect(lambda: self.MSA_Visualization())
         self.visualize_msa_data_button.clicked.connect(lambda: self.tabWidget.setCurrentIndex(2))
         self.visualize_msa_data_button.clicked.connect(lambda: self.splitter_9.setSizes([0,100]))
@@ -77,12 +81,11 @@ class Ui(QtWidgets.QMainWindow):
         self.visualize_pairwise_data_button.clicked.connect(lambda: self.tabWidget.setCurrentIndex(2)) 
         self.visualize_pairwise_data_button.clicked.connect(lambda: self.splitter_9.setSizes([100,0]))
 
+        # menubar function calls
         self.actionAbout_Us_2.triggered.connect(self.about_us)
-
-        
-        # self.align_msa_button.clicked.connect(self.get_input_msa)
         self.actionOpen_Fasta.triggered.connect(self.browse_files)
 
+        # MSA assessment function calls
         self.assess_msa_button.clicked.connect(lambda:self.msa_assessment(flag=True))
         
         self.sequence_list_1= None
@@ -97,22 +100,16 @@ class Ui(QtWidgets.QMainWindow):
         self.msa_flag = 0
 
     def ShowPopUpMessage(self, popUpMessage):
-        # msg = QMessageBox()
-        # msg.setIcon(QMessageBox.Critical)
-
-        # msg.setText("Error")
-        # msg.setInformativeText(popUpMessage)
-        # msg.setWindowTitle("Error")
-        # msg.exec_()
-        #################################### changed #########################
+        # Function to display a certain error message when an error occurs
         QMessageBox.warning(
             self, ' ERROR',popUpMessage)
 
 
     def browse_files(self): 
         try:
+            # to choose between input in gui and from fasta file flag = 1 is for fasta file
             self.msa_flag = 1
-            self.flag = 1 # to choose between input in gui and from fasta file flag = 1 is for fasta file
+            self.flag = 1 
             file_name = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File') 
             self.path = file_name[0] #variable to store opened file path
             fasta_read = open(self.path) # read a fasta  file
@@ -125,6 +122,24 @@ class Ui(QtWidgets.QMainWindow):
         except:
             self.ShowPopUpMessage("An error has occured wile opening the file")
 
+    def clear_msa_fields(self):
+        # clear all fields that had anything in them 
+        self.msa_seq1_in_line.clear()
+        self.msa_seq2_in_line.clear()
+        self.msa_seq3_in_line.clear()
+        self.msa_seq4_in_line.clear()
+        self.msa_output_line.clear()
+        self.lcd_mutual_information.display(0)
+        self.lcd_percent_identity.display(0)
+        self.lcd_sum_of_pairs.display(0)
+    
+    def clear_pairwise_fields(self):
+        # clear all fields that had anything in them 
+        self.pairwise_seq1_in_line.clear()
+        self.pairwise_seq2_in_line.clear()
+        self.pairwise_output_line.clear()
+
+
     def get_input_pairwise(self):
         try:
             if self.flag == 0: # by default read from the gui
@@ -133,7 +148,7 @@ class Ui(QtWidgets.QMainWindow):
                 seq2_in = self.pairwise_seq2_in_line.toPlainText()
             elif self.flag == 1:
                 self.flag = 0
-                # read from the fasta file
+                # read from the fasta file (take first two sequences for pairwise alignment)
                 seq1_in = self.sequence_1
                 seq2_in = self.sequence_2
                 # display the read sequences for the user to see in the gui
@@ -157,9 +172,9 @@ class Ui(QtWidgets.QMainWindow):
         try:
             if self.msa_flag == 1:
                 # read the input fasta file and display the sequences inside it in the input fields of the gui
-                # self.msa_flag = 0
                 fasta_read = open(self.path)
-                sequences= [i for i in SeqIO.parse(fasta_read,'fasta')] # loop over the sequences and place each in a variable
+                sequences= [i for i in SeqIO.parse(fasta_read,'fasta')] 
+                # loop over the sequences and place each in a variable
                 self.sequence_1= sequences[0].seq
                 self.sequence_2=sequences[1].seq
                 self.sequence_3=sequences[2].seq
@@ -179,10 +194,17 @@ class Ui(QtWidgets.QMainWindow):
                 self.msa_seq4_in_line.setPlainText(seq4_in)
                 
             elif self.msa_flag == 0:
+                # read the sequences written by the user
                 seq1 = self.msa_seq1_in_line.toPlainText()
                 seq2 = self.msa_seq2_in_line.toPlainText()
                 seq3 = self.msa_seq3_in_line.toPlainText()
                 seq4 = self.msa_seq4_in_line.toPlainText()
+                seq1= seq1.upper()
+                seq2= seq2.upper()
+                seq3= seq3.upper()
+                seq4= seq4.upper()
+                # check if a sequence is empty, user shouldn't enter less than 3 sequences
+                #  an error message is displayed if less than 3 sequences are written
                 if seq1 == "":
                     all_sequences = [seq2, seq3, seq4]
                 if seq2 == "":
@@ -204,7 +226,7 @@ class Ui(QtWidgets.QMainWindow):
     def global_alignment(self):
         try:
             seq1, seq2, match, mismatch, gap = self.get_input_pairwise()
-            # traceback step directions
+            # traceback step directions, assigning numerical values to each direction 
             done = 5
             up_dir = 1
             left_dir = 2
@@ -218,6 +240,7 @@ class Ui(QtWidgets.QMainWindow):
             #-----------------------------------GLOBAL ALIGNMENT-----------------------------------
 
             # SCORE MATRIX INITIALIZATION
+            # initialize first row and column with gapscore * index
             matrix_global = np.zeros((matrix_global_num_rows, matrix_global_num_cols))
             for i in range(matrix_global_num_cols):
                 matrix_global[0][i]= gap * i
@@ -225,6 +248,7 @@ class Ui(QtWidgets.QMainWindow):
                 matrix_global[j][0]= gap * j
 
             # TRACEBACK INITIALIZATION
+            # initialize cell at (0,0) as end, columns as left,  rows as up, and the rest as zero
             traceback_matrix = np.zeros((matrix_global_num_rows, matrix_global_num_cols))
             traceback_matrix[0,0] = done
             for j in range(1, matrix_global_num_cols):
@@ -233,6 +257,7 @@ class Ui(QtWidgets.QMainWindow):
                 traceback_matrix[i,0] = up_dir
 
             # SCORE MATRIX AND TRACEBACK MATRIX FILL
+            # starting from the second row and column fill according to max of match, mismatch, gap
             for i in range(1, matrix_global_num_rows):
                 for j in range(1, matrix_global_num_cols):
                     if seq1[j-1] == seq2[i-1]:
@@ -242,7 +267,7 @@ class Ui(QtWidgets.QMainWindow):
                     res = max(matrix_global[i-1][j-1] + score, matrix_global[i-1][j] + gap, matrix_global[i][j-1] + gap)
                     # fill the matrix with the max score at each step
                     matrix_global[i][j] = res
-                    # fill the traceback matrix with the direction or arrows for traceback
+                    # fill the traceback matrix with the direction or arrows 
                     if res == matrix_global[i-1][j-1] + score:
                         traceback_matrix[i][j] = diag_dir
                     if res == matrix_global[i-1][j] + gap:
@@ -402,8 +427,8 @@ class Ui(QtWidgets.QMainWindow):
             if self.msa_flag == 1:
                 self.msa_flag = 0
                 output = subprocess.check_output(
-                ["Installations\muscle5.1.win64.exe",
-                "-align", r".\data\Fasta Files\Group_1.fasta",
+                ["F:\Installations\muscle5.1.win64.exe",
+                "-align", self.path,
                 "-output", r".\aligned.fasta"],
                 text=True)
                 # open the file to display the results of the multiple sequence alignment
@@ -418,7 +443,7 @@ class Ui(QtWidgets.QMainWindow):
                 self.msa_output_line.setText(seq)
             elif self.msa_flag == 0:
                 output = subprocess.check_output(
-                ["Installations\muscle5.1.win64.exe",
+                ["F:\Installations\muscle5.1.win64.exe",
                 "-align", r".\user_seq.fasta",
                 "-output", r".\user_aligned.fasta"],
                 text=True)
@@ -450,6 +475,10 @@ class Ui(QtWidgets.QMainWindow):
         seq2_str = str(sequence_2)
         seq3_str = str(sequence_3)
         seq4_str = str(sequence_4)
+        seq1_str = seq1_str.upper()
+        seq2_str = seq2_str.upper()
+        seq3_str = seq3_str.upper()
+        seq4_str = seq4_str.upper()
         seq_len = len(seq4_str) - 1
 
         self.sequence_list_1 = stringToList(seq1_str)
@@ -457,6 +486,7 @@ class Ui(QtWidgets.QMainWindow):
         self.sequence_list_3 = stringToList(seq3_str)
         self.sequence_list_4 = stringToList(seq4_str)
         sequences_matrix = [self.sequence_list_1, self.sequence_list_2, self.sequence_list_3, self.sequence_list_4]
+      
         
         # calculate the percent identity
         total_pairs=0
@@ -566,26 +596,6 @@ class Ui(QtWidgets.QMainWindow):
         self.Canvas2.draw()
 
     def MSA_Visualization(self):
-        # fasta_read = open("aligned.fasta") # read a fasta  file
-        # sequences= [i for i in SeqIO.parse(fasta_read,'fasta')] # read multiple sequences from the file
-        # # store each sequence in a variable
-        # sequence_1= sequences[0].seq
-        # sequence_2=sequences[1].seq
-        # sequence_3=sequences[2].seq
-        # sequence_4=sequences[3].seq
-
-        # seq1_str = str(sequence_1)
-        # seq2_str = str(sequence_2)
-        # seq3_str = str(sequence_3)
-        # seq4_str = str(sequence_4)
-
-        # def stringToList(data):
-        #     return list(data)
-
-        # seq1 = stringToList(seq1_str)
-        # seq2 = stringToList(seq2_str)
-        # seq3 = stringToList(seq3_str)
-        # seq4 = stringToList(seq4_str)
         self.msa_assessment()
         mat = []
         for i in range(4):
@@ -599,11 +609,12 @@ class Ui(QtWidgets.QMainWindow):
 
         seq_arr = np.asarray(mat)
 
-        seq_arr[seq_arr=='A'] = '1' 
-        seq_arr[seq_arr=='G'] = '2'
-        seq_arr[seq_arr=='T'] = '3' 
-        seq_arr[seq_arr=='C'] = '4'
+        seq_arr[seq_arr=='A'] = '1' # purple
+        seq_arr[seq_arr=='G'] = '2' # blue
+        seq_arr[seq_arr=='T'] = '3' # green
+        seq_arr[seq_arr=='C'] = '4' # yellow
         seq_arr[seq_arr=='-'] = '0'
+
         int_seq = np.uint8(seq_arr)
         final = int_seq * 50
         self.draw_MSA_canvas(final, self.MSAVisualization)
