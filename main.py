@@ -452,7 +452,7 @@ class Ui(QtWidgets.QMainWindow):
                 seq = ""
                 for line in file:
                     if line.startswith(">"): 
-                        seq+= "\n\n\n"
+                        seq+= "\n\n"
                         continue
                     seq += line.strip()
                 self.msa_output_line.clear()
