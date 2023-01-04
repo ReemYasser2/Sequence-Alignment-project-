@@ -49,7 +49,7 @@ font: 9pt &quot;MS Shell Dlg 2&quot;;</string>
        <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -142,55 +142,6 @@ font: 9pt &quot;MS Shell Dlg 2&quot;;</string>
              </widget>
             </item>
            </layout>
-          </item>
-         </layout>
-        </item>
-        <item row="1" column="0">
-         <layout class="QGridLayout" name="gridLayout_10">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_9">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Output&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QScrollArea" name="scrollArea_3">
-            <property name="widgetResizable">
-             <bool>true</bool>
-            </property>
-            <widget class="QWidget" name="scrollAreaWidgetContents_5">
-             <property name="geometry">
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>1044</width>
-               <height>124</height>
-              </rect>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_4">
-              <item row="0" column="0">
-               <widget class="QLabel" name="pairwise_output_line">
-                <property name="font">
-                 <font>
-                  <family>MS Shell Dlg 2</family>
-                  <pointsize>10</pointsize>
-                  <weight>50</weight>
-                  <italic>false</italic>
-                  <bold>false</bold>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
-                </property>
-                <property name="text">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </widget>
           </item>
          </layout>
         </item>
@@ -400,6 +351,93 @@ QPushButton:hover {
           </item>
          </layout>
         </item>
+        <item row="1" column="0">
+         <layout class="QGridLayout" name="gridLayout_10">
+          <item row="4" column="0">
+           <widget class="QScrollArea" name="scrollArea_3">
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents_5">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>1044</width>
+               <height>120</height>
+              </rect>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_4">
+              <item row="0" column="0">
+               <widget class="QLabel" name="pairwise_output_line">
+                <property name="font">
+                 <font>
+                  <family>MS Shell Dlg 2</family>
+                  <pointsize>10</pointsize>
+                  <weight>50</weight>
+                  <italic>false</italic>
+                  <bold>false</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
+                </property>
+                <property name="text">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QLabel" name="label_9">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Output&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton">
+              <property name="maximumSize">
+               <size>
+                <width>150</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    border-radius: 3px;
+    background-color:#2c1155;
+    font: 12pt &quot;MS Shell Dlg 2&quot;;
+    }
+
+QPushButton:hover {
+    background-color:#6e2ad5
+    }</string>
+              </property>
+              <property name="text">
+               <string>Clear</string>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>icons/Garbage-Closed-256.png</normaloff>icons/Garbage-Closed-256.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="MSA">
@@ -407,203 +445,8 @@ QPushButton:hover {
         <string>MSA</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_19">
-        <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_11">
-          <item row="9" column="0">
-           <widget class="QScrollArea" name="scrollArea_5">
-            <property name="widgetResizable">
-             <bool>true</bool>
-            </property>
-            <widget class="QWidget" name="scrollAreaWidgetContents_6">
-             <property name="geometry">
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>518</width>
-               <height>147</height>
-              </rect>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_15">
-              <item row="0" column="0">
-               <widget class="QTextEdit" name="msa_seq2_in_line">
-                <property name="styleSheet">
-                 <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </widget>
-          </item>
-          <item row="7" column="1">
-           <widget class="QScrollArea" name="scrollArea_8">
-            <property name="widgetResizable">
-             <bool>true</bool>
-            </property>
-            <widget class="QWidget" name="scrollAreaWidgetContents_9">
-             <property name="geometry">
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>517</width>
-               <height>146</height>
-              </rect>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_20">
-              <item row="0" column="0">
-               <widget class="QTextEdit" name="msa_seq3_in_line">
-                <property name="styleSheet">
-                 <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label">
-            <property name="styleSheet">
-             <string notr="true">font: 11pt &quot;MS Shell Dlg 2&quot;;</string>
-            </property>
-            <property name="text">
-             <string>Sequence 1</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Sequence 3&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="0">
-           <widget class="QLabel" name="label_7">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Sequence 2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="1">
-           <widget class="QLabel" name="label_12">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Sequence 4&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_3"/>
-          </item>
-          <item row="15" column="0" colspan="2">
-           <widget class="QScrollArea" name="scrollArea_6">
-            <property name="widgetResizable">
-             <bool>true</bool>
-            </property>
-            <widget class="QWidget" name="scrollAreaWidgetContents_7">
-             <property name="geometry">
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>1044</width>
-               <height>85</height>
-              </rect>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_16">
-              <item row="0" column="0">
-               <widget class="QLabel" name="msa_output_line">
-                <property name="styleSheet">
-                 <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </widget>
-          </item>
-          <item row="14" column="0" colspan="2">
-           <widget class="QLabel" name="label_11">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Output&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <layout class="QGridLayout" name="gridLayout_12"/>
-          </item>
-          <item row="9" column="1">
-           <widget class="QScrollArea" name="scrollArea_7">
-            <property name="widgetResizable">
-             <bool>true</bool>
-            </property>
-            <widget class="QWidget" name="scrollAreaWidgetContents_8">
-             <property name="geometry">
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>517</width>
-               <height>147</height>
-              </rect>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_21">
-              <item row="0" column="0">
-               <widget class="QTextEdit" name="msa_seq4_in_line">
-                <property name="styleSheet">
-                 <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;
-</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </widget>
-          </item>
-          <item row="7" column="0">
-           <widget class="QScrollArea" name="scrollArea_4">
-            <property name="widgetResizable">
-             <bool>true</bool>
-            </property>
-            <widget class="QWidget" name="scrollAreaWidgetContents_2">
-             <property name="geometry">
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>518</width>
-               <height>146</height>
-              </rect>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_14">
-              <item row="0" column="0">
-               <widget class="QTextEdit" name="msa_seq1_in_line">
-                <property name="styleSheet">
-                 <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </widget>
-          </item>
-         </layout>
-        </item>
         <item row="1" column="0">
          <layout class="QGridLayout" name="gridLayout_13">
-          <item row="0" column="2">
-           <widget class="QLabel" name="label_14">
-            <property name="maximumSize">
-             <size>
-              <width>125</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Mutual Information</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="3">
            <widget class="QLCDNumber" name="lcd_mutual_information">
             <property name="maximumSize">
@@ -624,16 +467,16 @@ QPushButton:hover {
             </property>
            </widget>
           </item>
-          <item row="0" column="4">
-           <widget class="QLabel" name="label_15">
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_14">
             <property name="maximumSize">
              <size>
-              <width>100</width>
+              <width>125</width>
               <height>16777215</height>
              </size>
             </property>
             <property name="text">
-             <string>Sum Of Pairs</string>
+             <string>Mutual Information</string>
             </property>
            </widget>
           </item>
@@ -656,26 +499,7 @@ QPushButton:hover {
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QLCDNumber" name="lcd_percent_identity">
-            <property name="maximumSize">
-             <size>
-              <width>55</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="smallDecimalPoint">
-             <bool>false</bool>
-            </property>
-            <property name="digitCount">
-             <number>5</number>
-            </property>
-            <property name="value" stdset="0">
-             <double>0.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="9">
+          <item row="0" column="11">
            <widget class="QPushButton" name="align_msa_button">
             <property name="maximumSize">
              <size>
@@ -704,7 +528,39 @@ QPushButton:hover {
             </property>
            </widget>
           </item>
-          <item row="0" column="7">
+          <item row="0" column="4">
+           <widget class="QLabel" name="label_15">
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Sum Of Pairs</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLCDNumber" name="lcd_percent_identity">
+            <property name="maximumSize">
+             <size>
+              <width>55</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="smallDecimalPoint">
+             <bool>false</bool>
+            </property>
+            <property name="digitCount">
+             <number>5</number>
+            </property>
+            <property name="value" stdset="0">
+             <double>0.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="9">
            <widget class="QPushButton" name="visualize_msa_data_button">
             <property name="maximumSize">
              <size>
@@ -734,7 +590,7 @@ QPushButton:hover {
             </property>
            </widget>
           </item>
-          <item row="0" column="6">
+          <item row="0" column="8">
            <widget class="QPushButton" name="assess_msa_button">
             <property name="maximumSize">
              <size>
@@ -759,6 +615,262 @@ QPushButton:hover {
             </property>
            </widget>
           </item>
+          <item row="0" column="6">
+           <widget class="QLabel" name="label_49">
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Normalized MI</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="7">
+           <widget class="QLCDNumber" name="lcdNumber">
+            <property name="maximumSize">
+             <size>
+              <width>55</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_11">
+          <item row="18" column="0" colspan="2">
+           <widget class="QScrollArea" name="scrollArea_6">
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents_7">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>1044</width>
+               <height>85</height>
+              </rect>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_16">
+              <item row="0" column="0">
+               <widget class="QLabel" name="msa_output_line">
+                <property name="styleSheet">
+                 <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item row="9" column="0">
+           <widget class="QScrollArea" name="scrollArea_5">
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents_6">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>518</width>
+               <height>145</height>
+              </rect>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_15">
+              <item row="0" column="0">
+               <widget class="QTextEdit" name="msa_seq2_in_line">
+                <property name="styleSheet">
+                 <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item row="9" column="1">
+           <widget class="QScrollArea" name="scrollArea_7">
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents_8">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>517</width>
+               <height>145</height>
+              </rect>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_21">
+              <item row="0" column="0">
+               <widget class="QTextEdit" name="msa_seq4_in_line">
+                <property name="styleSheet">
+                 <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;
+</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <layout class="QGridLayout" name="gridLayout_12"/>
+          </item>
+          <item row="1" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_3"/>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label">
+            <property name="styleSheet">
+             <string notr="true">font: 11pt &quot;MS Shell Dlg 2&quot;;</string>
+            </property>
+            <property name="text">
+             <string>Sequence 1</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Sequence 3&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QScrollArea" name="scrollArea_4">
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents_2">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>518</width>
+               <height>144</height>
+              </rect>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_14">
+              <item row="0" column="0">
+               <widget class="QTextEdit" name="msa_seq1_in_line">
+                <property name="styleSheet">
+                 <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item row="7" column="1">
+           <widget class="QScrollArea" name="scrollArea_8">
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents_9">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>517</width>
+               <height>144</height>
+              </rect>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_20">
+              <item row="0" column="0">
+               <widget class="QTextEdit" name="msa_seq3_in_line">
+                <property name="styleSheet">
+                 <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Sequence 2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Sequence 4&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="0" colspan="2">
+           <layout class="QHBoxLayout" name="horizontalLayout_11">
+            <item>
+             <widget class="QLabel" name="label_11">
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Output&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_2">
+              <property name="maximumSize">
+               <size>
+                <width>150</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::WheelFocus</enum>
+              </property>
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="autoFillBackground">
+               <bool>false</bool>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    border-radius: 3px;
+    background-color:#2c1155;
+    font: 12pt &quot;MS Shell Dlg 2&quot;;
+    }
+
+QPushButton:hover {
+    background-color:#6e2ad5
+    }
+</string>
+              </property>
+              <property name="text">
+               <string>Clear</string>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>icons/Garbage-Closed-256.png</normaloff>icons/Garbage-Closed-256.png</iconset>
+              </property>
+              <property name="autoRepeat">
+               <bool>false</bool>
+              </property>
+              <property name="autoRepeatDelay">
+               <number>300</number>
+              </property>
+              <property name="default">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
          </layout>
         </item>
        </layout>
@@ -771,6 +883,119 @@ QPushButton:hover {
        <attribute name="title">
         <string>Visualization</string>
        </attribute>
+       <layout class="QGridLayout" name="gridLayout_86">
+        <item row="0" column="0">
+         <widget class="QSplitter" name="splitter_9">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <widget class="QSplitter" name="splitter_10">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <widget class="QScrollArea" name="scrollArea_45">
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents_46">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>519</width>
+               <height>264</height>
+              </rect>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_14">
+              <item>
+               <widget class="QLabel" name="label_16">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Heat Map&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QGridLayout" name="pairwise_heatmap"/>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+           <widget class="QScrollArea" name="scrollArea_46">
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents_47">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>519</width>
+               <height>264</height>
+              </rect>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_15">
+              <item>
+               <widget class="QLabel" name="label_17">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;correlation&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QGridLayout" name="pairwaise_correlation"/>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </widget>
+          <widget class="QScrollArea" name="scrollArea_47">
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="scrollAreaWidgetContents_48">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>1046</width>
+              <height>264</height>
+             </rect>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_16">
+             <item>
+              <widget class="QLabel" name="label_18">
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Alignment Visualization&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QGridLayout" name="MSAVisualization"/>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
@@ -791,13 +1016,14 @@ QPushButton:hover {
     </property>
     <addaction name="actionOpen_Fasta"/>
    </widget>
-   <widget class="QMenu" name="menuHelp_2">
+   <widget class="QMenu" name="actionAbout_Us">
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionAbout_Us_2"/>
    </widget>
    <addaction name="menuHelp"/>
-   <addaction name="menuHelp_2"/>
+   <addaction name="actionAbout_Us"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen_Fasta">
@@ -807,6 +1033,11 @@ QPushButton:hover {
    </property>
    <property name="text">
     <string>Open Fasta</string>
+   </property>
+  </action>
+  <action name="actionAbout_Us_2">
+   <property name="text">
+    <string>About Us </string>
    </property>
   </action>
  </widget>
