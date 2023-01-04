@@ -1,13 +1,14 @@
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets, uic, QtGui
 import sys
 import numpy as np
 import subprocess # for MSA using muscle
 from Bio import SeqIO
 from PyQt5.QtWidgets import *
-
 from math import log
 from collections import Counter
-
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+import pandas as pd
 def MI(sequences,i,j):
     Pi = Counter(sequence[i] for sequence in sequences)
     Pj = Counter(sequence[j] for sequence in sequences)
@@ -35,29 +36,78 @@ def compare(a,b):
         
     return identical_pairs_count,all_pairs_count
 
+def calc_sop(seq1, seq2, pair_scores):
+  sop = 0
+  for i in range(len(seq1)):
+    #if not a gap, get the score from the dictionary
+    if seq1[i] != '-' and seq2[i] != '-':
+        sop += pair_scores[(seq1[i]+seq2[i])]
+    else:
+        #sdet gap penalty with -2
+        sop -=2
+  return sop
+
+
+
+plt.rcParams["figure.autolayout"] = True
+# plt.rcParams['axes.facecolor'] = 'black'
+plt.rc('axes', edgecolor='w')
+plt.rc('xtick', color='w')
+plt.rc('ytick', color='w')
+
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):
         super(Ui, self).__init__()
         uic.loadUi('.\data\mainwindow.ui', self)
+       
+        self.setWindowIcon(QtGui.QIcon('./data/icons/icon.png')) # icon added
+        self.setWindowTitle("Sequence Alignment Viewer")
+
+
         self.show()
         self.global_align_button.clicked.connect(self.global_alignment)
         self.local_align_button.clicked.connect(self.local_alignment)
         self.align_msa_button.clicked.connect(self.multiple_sequence_alignment) 
+
+        self.visualize_msa_data_button.clicked.connect(lambda: self.MSA_Visualization())
+        self.visualize_msa_data_button.clicked.connect(lambda: self.tabWidget.setCurrentIndex(2))
+        self.visualize_msa_data_button.clicked.connect(lambda: self.splitter_9.setSizes([0,100]))
+
+        self.visualize_pairwise_data_button.clicked.connect(lambda: self.pairwise_plots(self.alignment_1_copy, self.alignment_2_copy, self.traceback_copy)) 
+        self.visualize_pairwise_data_button.clicked.connect(lambda: self.tabWidget.setCurrentIndex(2)) 
+        self.visualize_pairwise_data_button.clicked.connect(lambda: self.splitter_9.setSizes([100,0]))
+
+        self.actionAbout_Us_2.triggered.connect(self.about_us)
+
+        
         # self.align_msa_button.clicked.connect(self.get_input_msa)
         self.actionOpen_Fasta.triggered.connect(self.browse_files)
 
-        self.assess_msa_button.clicked.connect(self.msa_assessment)
+        self.assess_msa_button.clicked.connect(lambda:self.msa_assessment(flag=True))
+        
+        self.sequence_list_1= None
+        self.sequence_list_2= None
+        self.sequence_list_3= None
+        self.sequence_list_4= None
+        self.traceback_copy= None
+        self.alignment_1_copy =None   
+        self.alignment_2_copy =None
 
         self.flag = 0
         self.msa_flag = 0
 
     def ShowPopUpMessage(self, popUpMessage):
-        msg = QMessageBox()
-        msg.setIcon(QMessageBox.Critical)
-        msg.setText("Error")
-        msg.setInformativeText(popUpMessage)
-        msg.setWindowTitle("Error")
-        msg.exec_()
+        # msg = QMessageBox()
+        # msg.setIcon(QMessageBox.Critical)
+
+        # msg.setText("Error")
+        # msg.setInformativeText(popUpMessage)
+        # msg.setWindowTitle("Error")
+        # msg.exec_()
+        #################################### changed #########################
+        QMessageBox.warning(
+            self, ' ERROR',popUpMessage)
+
 
     def browse_files(self): 
         try:
@@ -199,6 +249,9 @@ class Ui(QtWidgets.QMainWindow):
                         traceback_matrix[i][j] = up_dir
                     if res == matrix_global[i][j-1] + gap:
                         traceback_matrix[i][j] = left_dir
+            
+            # save the score matrix and traceback matrix for later use (in plots)
+            self.traceback_copy = traceback_matrix
 
             aligned_seq1 = []
             aligned_seq2 = []
@@ -233,6 +286,10 @@ class Ui(QtWidgets.QMainWindow):
             output_seq1 += "\n"
             output_seq2 += "\n"
             alignment_score += "\n"
+
+            # save the output for later use (in plots)
+            self.alignment_1_copy = output_seq1
+            self.alignment_2_copy = output_seq2
 
             output = output_seq1 + output_seq2 + alignment_score
             self.pairwise_output_line.clear()
@@ -293,6 +350,10 @@ class Ui(QtWidgets.QMainWindow):
             aligned_seq2 = []
             i = start_loc_row[0] # rows
             j = start_loc_col[0] # cols
+            
+            # save the score matrix and traceback matrix for later use (in plots)
+            self.traceback_copy = traceback_matrix
+            
             # write into the aligned arrays, the nucleotide or added gap 
             # according to the direction in the traceback matrix
             while(i > 0 or j > 0):
@@ -323,7 +384,11 @@ class Ui(QtWidgets.QMainWindow):
             output_seq1 += "\n"
             output_seq2 += "\n"
             out_score += "\n"
-
+            
+            # save the output for later use (in plots)
+            self.alignment_1_copy = output_seq1
+            self.alignment_2_copy = output_seq2
+            
             output = output_seq1 + output_seq2 + out_score
             self.pairwise_output_line.clear()
             self.pairwise_output_line.setText(str(output))
@@ -371,7 +436,7 @@ class Ui(QtWidgets.QMainWindow):
         except:
             self.ShowPopUpMessage("An error has occured wile aligning the sequences")
 
-    def msa_assessment(self):
+    def msa_assessment(self,flag=False):
         fasta_read = open("aligned.fasta") # read a fasta  file
         sequences= [i for i in SeqIO.parse(fasta_read,'fasta')] # read multiple sequences from the file
 
@@ -387,11 +452,11 @@ class Ui(QtWidgets.QMainWindow):
         seq4_str = str(sequence_4)
         seq_len = len(seq4_str) - 1
 
-        seq1 = stringToList(seq1_str)
-        seq2 = stringToList(seq2_str)
-        seq3 = stringToList(seq3_str)
-        seq4 = stringToList(seq4_str)
-        sequences_matrix = [seq1, seq2, seq3, seq4]
+        self.sequence_list_1 = stringToList(seq1_str)
+        self.sequence_list_2 = stringToList(seq2_str)
+        self.sequence_list_3 = stringToList(seq3_str)
+        self.sequence_list_4 = stringToList(seq4_str)
+        sequences_matrix = [self.sequence_list_1, self.sequence_list_2, self.sequence_list_3, self.sequence_list_4]
         
         # calculate the percent identity
         total_pairs=0
@@ -406,18 +471,149 @@ class Ui(QtWidgets.QMainWindow):
 
             percent_Identity=identical_pairs_count/total_pairs*100 
 
+
+        # Calculate the SOP for all pairs of sequences
+        sop_total = 0
+        #setting match score with 3, and mismatch with -1
+        pair_scores = {'AA':3, 'CC':3, 'GG':3, 'TT':3, 'AT':-1, 'AG':-1, 'AC':-1, 'GA':-1, 'GC':-1, 'GT':-1, 'TC':-1, 'TA':-1, 'TG':-1, 'CA':-1, 'CT':-1, 'CG':-1}
+        #calculate sop for each pair of sequences
+        for i in range(len(sequences_matrix)):
+            for j in range(i+1, len(sequences_matrix)):
+                sop = calc_sop(sequences_matrix[i], sequences_matrix[j], pair_scores)
+                sop_total += sop
+
+        formatted_SOP = "{:.2f}".format(sop_total)
+        print(f'Total SOP: {sop_total}')
+
         formatted_PI = "{:.2f}".format(percent_Identity)
         print(formatted_PI)
         
         out = MI(sequences_matrix,seq_len,seq_len)
+
+
+
         formatted_mi = "{:.2f}".format(out)
         
+        if flag == True:
+            self.lcd_mutual_information.display(formatted_mi)
+            self.lcd_percent_identity.display(formatted_PI)
+            self.lcd_sum_of_pairs.display(formatted_SOP)
+
+    def pairwise_plots(self, aligned_seq1,aligned_seq2, traceback_matrix):
+        self.heatmap_parwise_plot(traceback_matrix)
+        self.correlation_parwise_plot(aligned_seq1,aligned_seq2)
+
+    def draw_MSA_canvas(self, image, layout):
+        self.figure = plt.figure(figsize=(15,5))
+        self.figure.patch.set_facecolor('#140826')
+        self.Canvas = FigureCanvas(self.figure)
+        layout.addWidget(self.Canvas,0, 0, 1, 1)
+        plt.imshow(image, aspect= 5)
+        self.Canvas.draw() 
+
+    def heatmap_parwise_plot(self, traceback_matrix):
+        plt.pcolormesh(traceback_matrix,cmap="ocean")
+        plt.ylim(len(traceback_matrix),0)
+        self.fig = plt.figure(figsize=(15,5))
+        self.fig.patch.set_facecolor('#140826')
+        self.Canvas = FigureCanvas(self.fig)
+        self.pairwise_heatmap.addWidget(self.Canvas,0, 0, 1, 1)
+        plt.imshow(traceback_matrix)
+        self.Canvas.draw() 
+
+    def correlation_parwise_plot(self, aligned_seq1, aligned_seq2):
+        aligned_seq1_copy = []
+        aligned_seq2_copy = []
         
-        self.lcd_mutual_information.display(formatted_mi)
-        self.lcd_percent_identity.display(formatted_PI)
+        for i in range(len(aligned_seq1)):
+            if aligned_seq1[i] == 'a' or aligned_seq1[i] == 'A':
+                aligned_seq1_copy.append(1)
+            elif aligned_seq1[i] == 'c' or aligned_seq1[i] == 'C':
+                aligned_seq1_copy.append(4)
+            elif aligned_seq1[i] == 'g' or aligned_seq1[i] == 'G':
+                aligned_seq1_copy.append(2)
+            elif aligned_seq1[i] == 't' or aligned_seq1[i] == 'T':
+                aligned_seq1_copy.append(3)
+            elif aligned_seq1[i] == '-':
+                aligned_seq1_copy.append(0)
+        
+        for i in range(len(aligned_seq2)):
+            if aligned_seq2[i] == 'a' or aligned_seq2[i] == 'A':
+                aligned_seq2_copy.append(2)
+            elif aligned_seq2[i] == 'c' or aligned_seq2[i] == 'C':
+                aligned_seq2_copy.append(1)
+            elif aligned_seq2[i] == 'g' or aligned_seq2[i] == 'G':
+                aligned_seq2_copy.append(3)
+            elif aligned_seq2[i] == 't' or aligned_seq2[i] == 'T':
+                aligned_seq2_copy.append(4)
+            elif aligned_seq2[i] == '-':
+                aligned_seq2_copy.append(5)
 
+        y = pd.Series(aligned_seq1_copy)
+        x = pd.Series(aligned_seq2_copy)
+        correlation = y.corr(x)
+        correlation
+        
+        self.fig2 = plt.figure(figsize=(15,5))
+        self.fig2.patch.set_facecolor('#140826')
+        self.Canvas2 = FigureCanvas(self.fig2)
+        self.pairwaise_correlation.addWidget(self.Canvas2,0, 0, 1, 1)
+        plt.scatter(x, y)
+        plt.plot(np.unique(x),
+                np.poly1d(np.polyfit(x, y, 1))
+                (np.unique(x)), color='red')
+        
+        self.Canvas2.draw()
 
+    def MSA_Visualization(self):
+        # fasta_read = open("aligned.fasta") # read a fasta  file
+        # sequences= [i for i in SeqIO.parse(fasta_read,'fasta')] # read multiple sequences from the file
+        # # store each sequence in a variable
+        # sequence_1= sequences[0].seq
+        # sequence_2=sequences[1].seq
+        # sequence_3=sequences[2].seq
+        # sequence_4=sequences[3].seq
 
+        # seq1_str = str(sequence_1)
+        # seq2_str = str(sequence_2)
+        # seq3_str = str(sequence_3)
+        # seq4_str = str(sequence_4)
+
+        # def stringToList(data):
+        #     return list(data)
+
+        # seq1 = stringToList(seq1_str)
+        # seq2 = stringToList(seq2_str)
+        # seq3 = stringToList(seq3_str)
+        # seq4 = stringToList(seq4_str)
+        self.msa_assessment()
+        mat = []
+        for i in range(4):
+            mat.append(self.sequence_list_1)
+        for i in range(4):
+            mat.append(self.sequence_list_2)
+        for i in range(4):
+            mat.append(self.sequence_list_3)
+        for i in range(4):
+            mat.append(self.sequence_list_4)
+
+        seq_arr = np.asarray(mat)
+
+        seq_arr[seq_arr=='A'] = '1' 
+        seq_arr[seq_arr=='G'] = '2'
+        seq_arr[seq_arr=='T'] = '3' 
+        seq_arr[seq_arr=='C'] = '4'
+        seq_arr[seq_arr=='-'] = '0'
+        int_seq = np.uint8(seq_arr)
+        final = int_seq * 50
+        self.draw_MSA_canvas(final, self.MSAVisualization)
+
+    def about_us(self):
+        QMessageBox.about(
+            self,
+            " About ",
+            "This is an Sequence Alignment Viewer \nCreated by senior student from the faculty of Engineering, Cairo Uniersity, Systems and Biomedical Engineering department \n \nTeam members: \n- Abdullah Saeed \n- Ro'aa Ehan \n- Farah Gamal \n- Huda Saeed \n- Reem Yasser \nhttps://github.com/Abdullahsaeed10/Sequence-Alignment-project- ",
+        )
 
 
     
