@@ -407,7 +407,7 @@ QPushButton:hover {
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton">
+             <widget class="QPushButton" name="pairwise_clear_button">
               <property name="maximumSize">
                <size>
                 <width>150</width>
@@ -823,7 +823,7 @@ QPushButton:hover {
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_2">
+             <widget class="QPushButton" name="msa_clear_button">
               <property name="maximumSize">
                <size>
                 <width>150</width>
@@ -902,7 +902,7 @@ QPushButton:hover {
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>519</width>
+               <width>464</width>
                <height>264</height>
               </rect>
              </property>
@@ -935,7 +935,7 @@ QPushButton:hover {
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>519</width>
+               <width>574</width>
                <height>264</height>
               </rect>
              </property>
