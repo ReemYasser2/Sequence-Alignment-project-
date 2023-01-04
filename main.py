@@ -445,10 +445,10 @@ class Ui(QtWidgets.QMainWindow):
                 output = subprocess.check_output(
                 ["F:\Installations\muscle5.1.win64.exe",
                 "-align", r".\user_seq.fasta",
-                "-output", r".\user_aligned.fasta"],
+                "-output", r".\aligned.fasta"],
                 text=True)
                 # open the file to display the results of the multiple sequence alignment
-                file = open("user_aligned.fasta")
+                file = open("aligned.fasta")
                 seq = ""
                 for line in file:
                     if line.startswith(">"): 
