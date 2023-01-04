@@ -381,7 +381,7 @@ class Ui(QtWidgets.QMainWindow):
             
             # write into the aligned arrays, the nucleotide or added gap 
             # according to the direction in the traceback matrix
-            while(i > 0 or j > 0):
+            while(matrix_local[i,j]!=0):
                 if traceback_matrix[i,j] == diag_dir:
                     aligned_seq1.append(seq1[j-1])
                     aligned_seq2.append(seq2[i-1])
